@@ -1,0 +1,274 @@
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif;
+  background: #F5F3EF;
+  color: #1A1A1A;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+input { font-family: inherit; }
+
+/* ── Screens ── */
+.screen { display: none; min-height: 100dvh; }
+.screen.active { display: block; }
+
+/* ── Login ── */
+.login-wrap {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100dvh; padding: 40px 28px; gap: 0;
+}
+.login-logo { text-align: center; margin-bottom: 40px; }
+.logo-icon-lg {
+  width: 72px; height: 72px; background: #FFF0EB; border-radius: 22px;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+}
+.login-logo h1 { font-size: 28px; font-weight: 800; color: #1A1A1A; letter-spacing: -0.5px; }
+.login-logo p { font-size: 14px; color: #888; margin-top: 6px; }
+.login-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; width: 100%; max-width: 300px; }
+.feat { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #555; }
+.feat-icon { font-size: 18px; }
+.google-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; max-width: 320px; padding: 14px 20px;
+  background: white; border: 1.5px solid #E0E0E0; border-radius: 14px;
+  font-size: 15px; font-weight: 600; color: #1A1A1A;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.google-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+.google-btn:active { transform: scale(.98); }
+.local-btn {
+  margin-top: 12px; font-size: 13px; color: #AAA; text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ── App Header ── */
+.app-header {
+  background: white; padding: 52px 20px 0; position: sticky; top: 0; z-index: 50;
+  border-bottom: 1px solid #F0EDE8;
+}
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-icon-sm {
+  width: 30px; height: 30px; background: #FF6B35; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-text { font-size: 17px; color: #1A1A1A; letter-spacing: -.3px; }
+.logo-text b { font-weight: 800; }
+.header-actions { display: flex; gap: 4px; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  color: #666; transition: background .15s, color .15s;
+}
+.icon-btn:hover { background: #F5F3EF; color: #1A1A1A; }
+.icon-btn.syncing svg { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.greeting { margin-bottom: 14px; }
+.greeting h2 { font-size: 20px; font-weight: 700; letter-spacing: -.3px; }
+.greeting p { font-size: 12px; color: #AAA; margin-top: 2px; }
+
+.week-strip { display: flex; justify-content: space-between; padding-bottom: 14px; }
+.day-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+.day-lbl { font-size: 11px; color: #BBB; font-weight: 500; }
+.day-num {
+  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: #777; transition: all .2s;
+}
+.day-item.is-today .day-lbl { color: #FF6B35; }
+.day-item.is-today .day-num { background: #FF6B35; color: white; }
+.day-item.is-past .day-num { background: #FFE8DC; color: #FF6B35; }
+
+/* ── Progress Banner ── */
+.progress-banner {
+  margin: 16px 16px 0; background: #FF6B35; border-radius: 20px;
+  padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+}
+.prog-title { font-size: 15px; font-weight: 700; color: white; margin-bottom: 4px; }
+.prog-sub { font-size: 12px; color: rgba(255,255,255,.8); margin-bottom: 12px; }
+.prog-bar-wrap { width: 160px; height: 6px; background: rgba(255,255,255,.3); border-radius: 3px; overflow: hidden; }
+.prog-bar-fill { height: 100%; background: white; border-radius: 3px; transition: width .6s cubic-bezier(.4,0,.2,1); width: 0%; }
+.prog-ring-wrap { position: relative; width: 60px; height: 60px; flex-shrink: 0; }
+.prog-ring-label {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: white;
+}
+
+/* ── Stats ── */
+.stats-row { display: flex; gap: 10px; padding: 14px 16px 0; }
+.stat-card { flex: 1; background: white; border-radius: 14px; padding: 12px 10px; }
+.stat-label { font-size: 10px; color: #AAA; margin-bottom: 4px; white-space: nowrap; }
+.stat-val { font-size: 20px; font-weight: 700; color: #1A1A1A; }
+.stat-val span { font-size: 11px; font-weight: 400; color: #AAA; margin-left: 1px; }
+
+/* ── Section ── */
+.section { padding: 16px 16px 100px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.section-title { font-size: 15px; font-weight: 700; }
+.section-badge { font-size: 12px; color: #FF6B35; font-weight: 600; }
+
+/* ── Habit Cards ── */
+.habit-list { display: flex; flex-direction: column; gap: 10px; }
+.habit-card {
+  background: white; border-radius: 16px; padding: 14px 14px;
+  display: flex; align-items: center; gap: 12px;
+  border: 1.5px solid transparent; cursor: pointer;
+  transition: transform .15s, border-color .2s, background .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.habit-card:active { transform: scale(.98); }
+.habit-card.is-done { border-color: #FFDDD0; background: #FFFAF8; }
+.habit-card .hab-icon {
+  width: 42px; height: 42px; border-radius: 13px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.habit-card .hab-body { flex: 1; min-width: 0; }
+.habit-card .hab-name { font-size: 14px; font-weight: 600; color: #1A1A1A; }
+.habit-card .hab-meta { font-size: 11px; color: #BBB; margin-top: 2px; }
+.habit-card .hab-meta .streak { color: #FF8C42; font-weight: 600; }
+.habit-card .hab-time { font-size: 11px; color: #CCC; flex-shrink: 0; }
+.habit-card .hab-check {
+  width: 26px; height: 26px; border-radius: 50%; border: 2px solid #DDD;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: all .2s;
+}
+.habit-card.is-done .hab-check { background: #FF6B35; border-color: #FF6B35; }
+.hab-check-icon { display: none; }
+.is-done .hab-check-icon { display: block; }
+.habit-card .hab-edit-btn {
+  width: 28px; height: 28px; border-radius: 8px; color: #CCC;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background .15s, color .15s;
+}
+.habit-card .hab-edit-btn:hover { background: #F5F3EF; color: #666; }
+
+/* ── Empty ── */
+.empty-state { text-align: center; padding: 48px 20px; }
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state p { font-size: 15px; font-weight: 600; color: #555; margin-bottom: 6px; }
+.empty-state small { font-size: 13px; color: #AAA; }
+
+/* ── FAB ── */
+.fab {
+  position: fixed; bottom: 24px; right: 20px;
+  width: 54px; height: 54px; border-radius: 50%; background: #FF6B35;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(255,107,53,.45); z-index: 40;
+  transition: transform .2s;
+}
+.fab:hover { transform: scale(1.07); }
+.fab:active { transform: scale(.95); }
+
+/* ── Modal Overlay ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100;
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-sheet {
+  background: white; border-radius: 24px 24px 0 0;
+  padding: 16px 20px 40px; width: 100%; max-width: 480px;
+  transform: translateY(30px); transition: transform .3s cubic-bezier(.4,0,.2,1);
+  max-height: 90dvh; overflow-y: auto;
+}
+.modal-overlay.open .modal-sheet { transform: translateY(0); }
+.modal-handle {
+  width: 36px; height: 4px; background: #E0DDD8; border-radius: 2px;
+  margin: 0 auto 18px;
+}
+.modal-sheet h3 { font-size: 17px; font-weight: 700; margin-bottom: 18px; text-align: center; }
+
+/* ── Icon & Color Picker ── */
+.icon-picker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 12px; }
+.icon-opt {
+  height: 46px; border-radius: 12px; border: 1.5px solid #EEE;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  cursor: pointer; transition: all .15s;
+}
+.icon-opt.sel { border-color: #FF6B35; background: #FFF0EB; }
+.color-picker { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.color-opt {
+  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: transform .15s;
+}
+.color-opt.sel { border-color: #333; transform: scale(1.15); }
+
+/* ── Form Fields ── */
+.field-label { display: block; font-size: 12px; font-weight: 600; color: #888; margin-bottom: 6px; }
+.modal-sheet input[type="text"] {
+  width: 100%; padding: 12px 14px; border: 1.5px solid #EEE; border-radius: 12px;
+  font-size: 14px; color: #1A1A1A; margin-bottom: 14px; outline: none;
+  transition: border-color .15s;
+}
+.modal-sheet input[type="text"]:focus { border-color: #FF6B35; }
+.modal-actions { display: flex; gap: 10px; margin-top: 4px; }
+.modal-btn-save {
+  flex: 1; padding: 14px; background: #FF6B35; border-radius: 14px;
+  color: white; font-size: 15px; font-weight: 700;
+  transition: transform .15s, opacity .15s;
+}
+.modal-btn-save:active { transform: scale(.98); }
+.modal-btn-del {
+  padding: 14px 18px; background: #FFF0F0; border-radius: 14px;
+  color: #E24B4A; font-size: 14px; font-weight: 600;
+}
+
+/* ── Menu ── */
+.menu-user {
+  display: flex; align-items: center; gap: 12px;
+  padding: 4px 0 18px; border-bottom: 1px solid #F0EDE8; margin-bottom: 12px;
+}
+.menu-avatar {
+  width: 44px; height: 44px; border-radius: 50%; background: #FFE8DC;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: #FF6B35; overflow: hidden;
+}
+.menu-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.menu-name { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+.menu-email { font-size: 12px; color: #AAA; margin-top: 2px; }
+.menu-list { display: flex; flex-direction: column; gap: 2px; }
+.menu-item {
+  display: flex; align-items: center; gap: 12px; padding: 13px 10px;
+  border-radius: 12px; font-size: 14px; font-weight: 500; color: #333;
+  transition: background .15s;
+}
+.menu-item:hover { background: #F5F3EF; }
+.menu-item span { font-size: 18px; }
+.menu-item.danger { color: #E24B4A; }
+
+/* ── Confirm ── */
+.confirm-sheet { padding-bottom: 28px; }
+.confirm-title { font-size: 17px; font-weight: 700; text-align: center; margin-bottom: 8px; }
+.confirm-msg { font-size: 13px; color: #888; text-align: center; margin-bottom: 24px; line-height: 1.6; }
+.confirm-btns { display: flex; gap: 10px; }
+.confirm-cancel {
+  flex: 1; padding: 13px; border-radius: 12px; background: #F5F3EF;
+  font-size: 14px; font-weight: 600; color: #555;
+}
+.confirm-ok {
+  flex: 1; padding: 13px; border-radius: 12px; background: #FFF0F0;
+  font-size: 14px; font-weight: 600; color: #E24B4A;
+}
+.confirm-ok.danger { background: #E24B4A; color: white; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 92px; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: #1A1A1A; color: white; font-size: 13px; font-weight: 500;
+  padding: 10px 18px; border-radius: 20px; z-index: 200;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s;
+  white-space: nowrap; max-width: calc(100vw - 40px); text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Sync badge ── */
+.sync-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #FF6B35;
+  position: absolute; top: 4px; right: 4px;
+}
+.icon-btn { position: relative; }
