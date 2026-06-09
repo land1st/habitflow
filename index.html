@@ -75,7 +75,7 @@ input{font-family:inherit}
 .stat-val span{font-size:11px;font-weight:400;color:#AAA;margin-left:1px}
 
 /* ── Section ── */
-.section{padding:16px 16px 100px}
+.section{padding:16px 16px 0}
 .section-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .section-title{font-size:15px;font-weight:700}
 .section-badge{font-size:12px;color:#FF6B35;font-weight:600}
@@ -145,6 +145,34 @@ input{font-family:inherit}
 .confirm-btns{display:flex;gap:10px}
 .btn-cancel{flex:1;padding:13px;border-radius:12px;background:#F5F3EF;font-size:14px;font-weight:600;color:#555}
 .btn-ok{flex:1;padding:13px;border-radius:12px;background:#E24B4A;font-size:14px;font-weight:600;color:white}
+
+/* ── Today's Log ── */
+.log-section{padding:0 16px 16px}
+.log-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.log-card{background:white;border-radius:16px;padding:14px 16px}
+.log-card-wide{background:white;border-radius:16px;padding:14px 16px}
+.log-card-lbl{font-size:11px;color:#AAA;margin-bottom:6px;font-weight:500}
+.log-card-val{font-size:22px;font-weight:800;color:#1A1A1A;line-height:1}
+.log-card-val span{font-size:12px;font-weight:400;color:#AAA;margin-left:2px}
+.log-card-sub{font-size:11px;color:#AAA;margin-top:3px}
+.log-card-bar-wrap{height:6px;background:#F0EDE8;border-radius:3px;margin-top:10px;overflow:hidden}
+.log-card-bar{height:100%;border-radius:3px;background:#FF6B35;transition:width .6s cubic-bezier(.4,0,.2,1)}
+/* 7-day chart */
+.week-chart{display:flex;align-items:flex-end;justify-content:space-between;gap:4px;height:60px;margin-top:10px}
+.wc-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.wc-bar-wrap{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.wc-bar{width:100%;max-width:24px;border-radius:4px 4px 0 0;background:#FFE0D0;transition:height .5s cubic-bezier(.4,0,.2,1);min-height:2px}
+.wc-bar.is-today-bar{background:#FF6B35}
+.wc-day{font-size:10px;color:#BBB;font-weight:500}
+/* Achievement badges */
+.achieve-section{padding:0 16px 100px}
+.achieve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.badge-card{background:white;border-radius:16px;padding:14px 10px;text-align:center;transition:transform .15s}
+.badge-card.locked{opacity:.45}
+.badge-icon{font-size:28px;margin-bottom:6px}
+.badge-name{font-size:11px;font-weight:600;color:#1A1A1A;line-height:1.3}
+.badge-desc{font-size:10px;color:#BBB;margin-top:3px;line-height:1.3}
+.badge-card.unlocked .badge-icon{filter:drop-shadow(0 2px 6px rgba(255,107,53,.35))}
 
 /* ── Toast ── */
 .toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%) translateY(10px);background:#1A1A1A;color:white;font-size:13px;font-weight:500;padding:10px 18px;border-radius:20px;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;white-space:nowrap;max-width:calc(100vw - 40px);text-align:center}
@@ -232,6 +260,38 @@ input{font-family:inherit}
       <p>아직 습관이 없어요</p>
       <small>+ 버튼으로 첫 습관을 추가해보세요</small>
     </div>
+  </div>
+
+  <!-- ── 오늘의 기록 ── -->
+  <div class="log-section">
+    <div class="section-hd" style="padding:16px 0 12px">
+      <span class="section-title">오늘의 기록</span>
+    </div>
+    <div class="log-grid">
+      <div class="log-card">
+        <div class="log-card-lbl">⏱ 총 집중 시간</div>
+        <div class="log-card-val" id="log-time">0<span>분</span></div>
+        <div class="log-card-sub" id="log-time-sub">완료한 습관 기준</div>
+      </div>
+      <div class="log-card">
+        <div class="log-card-lbl">🎯 달성률</div>
+        <div class="log-card-val" id="log-rate">0<span>%</span></div>
+        <div class="log-card-bar-wrap"><div class="log-card-bar" id="log-rate-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="log-card-wide">
+      <div class="log-card-lbl">📅 최근 7일 달성 현황</div>
+      <div class="week-chart" id="week-chart"></div>
+    </div>
+  </div>
+
+  <!-- ── 달성 뱃지 ── -->
+  <div class="achieve-section">
+    <div class="section-hd">
+      <span class="section-title">달성 뱃지</span>
+      <span class="section-badge" id="badge-count">0개 획득</span>
+    </div>
+    <div class="achieve-grid" id="achieve-grid"></div>
   </div>
 
   <button class="fab" id="btn-add">
@@ -425,12 +485,114 @@ function getWeeklyRate() {
 }
 
 // ── RENDER ──
+// ── TODAY'S LOG ──
+function parseMins(timeStr) {
+  if (!timeStr) return 0;
+  var m = timeStr.match(/(\d+)\s*분/);
+  if (m) return parseInt(m[1]);
+  m = timeStr.match(/(\d+)\s*시간/);
+  if (m) return parseInt(m[1]) * 60;
+  return 0;
+}
+
+function updateTodayLog() {
+  var today = todayKey();
+  var done = state.completions[today] || [];
+  var total = state.habits.length;
+  var doneCount = done.length;
+  var pct = total ? Math.round(doneCount / total * 100) : 0;
+
+  // 집중 시간: 완료된 습관의 time 파싱 합산
+  var mins = 0;
+  done.forEach(function(id) {
+    var h = state.habits.find(function(x){ return x.id === id; });
+    if (h) mins += parseMins(h.time);
+  });
+
+  document.getElementById('log-time').innerHTML = mins + '<span>분</span>';
+  document.getElementById('log-time-sub').textContent = doneCount + '개 습관 완료 기준';
+  document.getElementById('log-rate').innerHTML = pct + '<span>%</span>';
+  document.getElementById('log-rate-bar').style.width = pct + '%';
+
+  // 7일 차트
+  var chart = document.getElementById('week-chart');
+  chart.innerHTML = '';
+  var DAYS = ['일','월','화','수','목','금','토'];
+  var todayDate = new Date();
+  var maxVal = 1;
+  var cols = [];
+  for (var i = 6; i >= 0; i--) {
+    var d = new Date(todayDate); d.setDate(d.getDate() - i);
+    var k = fmtDate(d);
+    var cnt = (state.completions[k] || []).length;
+    var t = state.habits.length || 1;
+    cols.push({ day: DAYS[d.getDay()], pct: Math.round(cnt / t * 100), isToday: i === 0 });
+    if (cnt > maxVal) maxVal = cnt;
+  }
+  cols.forEach(function(c) {
+    var col = document.createElement('div');
+    col.className = 'wc-col';
+    var barH = Math.max(2, Math.round(c.pct * 0.5)); // max 50px
+    col.innerHTML =
+      '<div class="wc-bar-wrap"><div class="wc-bar' + (c.isToday ? ' is-today-bar' : '') +
+      '" style="height:' + barH + 'px"></div></div>' +
+      '<div class="wc-day">' + c.day + '</div>';
+    chart.appendChild(col);
+  });
+}
+
+// ── ACHIEVEMENTS ──
+var BADGES = [
+  { id:'first',   icon:'🌱', name:'첫 발걸음',   desc:'첫 습관 완료',        check: function(){ return getTotalCompletions() >= 1; } },
+  { id:'week1',   icon:'🔥', name:'7일 연속',     desc:'7일 연속 달성',       check: function(){ return getOverallStreak() >= 7; } },
+  { id:'month1',  icon:'💎', name:'30일 연속',    desc:'30일 연속 달성',      check: function(){ return getOverallStreak() >= 30; } },
+  { id:'habit5',  icon:'🎯', name:'습관 5개',     desc:'습관 5개 이상 등록',  check: function(){ return state.habits.length >= 5; } },
+  { id:'perfect', icon:'⭐', name:'완벽한 하루',  desc:'하루 전체 달성',      check: function(){ return hasPerfectDay(); } },
+  { id:'c50',     icon:'🏆', name:'50회 달성',    desc:'총 50회 완료',        check: function(){ return getTotalCompletions() >= 50; } },
+  { id:'c100',    icon:'🥇', name:'100회 달성',   desc:'총 100회 완료',       check: function(){ return getTotalCompletions() >= 100; } },
+  { id:'week4',   icon:'🌟', name:'4주 달성',     desc:'28일 연속 달성',      check: function(){ return getOverallStreak() >= 28; } },
+  { id:'earlybird',icon:'🌅',name:'얼리버드',     desc:'7일 이상 스트릭',     check: function(){ return getOverallStreak() >= 7; } },
+];
+
+function getTotalCompletions() {
+  var total = 0;
+  Object.values(state.completions).forEach(function(arr){ total += arr.length; });
+  return total;
+}
+
+function hasPerfectDay() {
+  if (!state.habits.length) return false;
+  return Object.values(state.completions).some(function(arr){
+    return arr.length >= state.habits.length;
+  });
+}
+
+function renderAchievements() {
+  var grid = document.getElementById('achieve-grid');
+  grid.innerHTML = '';
+  var unlocked = 0;
+  BADGES.forEach(function(b) {
+    var ok = b.check();
+    if (ok) unlocked++;
+    var card = document.createElement('div');
+    card.className = 'badge-card ' + (ok ? 'unlocked' : 'locked');
+    card.innerHTML =
+      '<div class="badge-icon">' + b.icon + '</div>' +
+      '<div class="badge-name">' + b.name + '</div>' +
+      '<div class="badge-desc">' + b.desc + '</div>';
+    grid.appendChild(card);
+  });
+  document.getElementById('badge-count').textContent = unlocked + '개 획득';
+}
+
 function renderAll() {
   renderGreeting();
   renderWeekStrip();
   renderHabits();
   updateProgress();
   updateStats();
+  updateTodayLog();
+  renderAchievements();
 }
 
 function renderGreeting() {
