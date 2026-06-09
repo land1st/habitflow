@@ -146,33 +146,40 @@ input{font-family:inherit}
 .btn-cancel{flex:1;padding:13px;border-radius:12px;background:#F5F3EF;font-size:14px;font-weight:600;color:#555}
 .btn-ok{flex:1;padding:13px;border-radius:12px;background:#E24B4A;font-size:14px;font-weight:600;color:white}
 
-/* ── Today's Log ── */
+/* ── 오늘의 기록 ── */
 .log-section{padding:0 16px 16px}
-.log-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.log-card{background:white;border-radius:16px;padding:14px 16px}
-.log-card-wide{background:white;border-radius:16px;padding:14px 16px}
-.log-card-lbl{font-size:11px;color:#AAA;margin-bottom:6px;font-weight:500}
-.log-card-val{font-size:22px;font-weight:800;color:#1A1A1A;line-height:1}
-.log-card-val span{font-size:12px;font-weight:400;color:#AAA;margin-left:2px}
-.log-card-sub{font-size:11px;color:#AAA;margin-top:3px}
-.log-card-bar-wrap{height:6px;background:#F0EDE8;border-radius:3px;margin-top:10px;overflow:hidden}
-.log-card-bar{height:100%;border-radius:3px;background:#FF6B35;transition:width .6s cubic-bezier(.4,0,.2,1)}
-/* 7-day chart */
-.week-chart{display:flex;align-items:flex-end;justify-content:space-between;gap:4px;height:60px;margin-top:10px}
-.wc-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.log-card{background:white;border-radius:20px;padding:18px 16px;margin-bottom:10px}
+.log-sub-title{font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:12px}
+.weather-row{display:flex;gap:8px}
+.weather-opt{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border-radius:14px;border:1.5px solid #EEE;cursor:pointer;transition:all .15s}
+.weather-opt.sel{border-color:#FF6B35;background:#FFF0EB}
+.weather-opt .w-icon{font-size:22px;line-height:1}
+.weather-opt .w-lbl{font-size:10px;color:#888;font-weight:500}
+.weather-opt.sel .w-lbl{color:#FF6B35;font-weight:700}
+.mood-row{display:flex;gap:8px}
+.mood-opt{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.mood-face{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid transparent;transition:all .15s}
+.mood-lbl{font-size:10px;color:#BBB;font-weight:500}
+.mood-opt.sel .mood-face{border-color:#FF6B35;transform:scale(1.1)}
+.mood-opt.sel .mood-lbl{color:#FF6B35;font-weight:700}
+.diary-wrap{position:relative}
+.diary-input{width:100%;min-height:80px;padding:12px 14px;border:1.5px solid #EEE;border-radius:14px;font-size:14px;color:#1A1A1A;resize:none;outline:none;font-family:inherit;transition:border-color .15s;line-height:1.6}
+.diary-input:focus{border-color:#FF6B35}
+.diary-count{position:absolute;bottom:10px;right:12px;font-size:11px;color:#BBB}
+/* 이번 주 달성률 */
+.week-section{padding:0 16px 100px}
+.week-card{background:white;border-radius:20px;padding:18px 16px}
+.week-rate-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.week-rate-val{font-size:28px;font-weight:800;color:#1A1A1A}
+.week-rate-val span{font-size:16px;font-weight:700}
+.week-rate-sub{font-size:11px;color:#AAA;margin-top:2px}
+.week-vs-badge{background:#FFF0EB;color:#FF6B35;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+.week-chart{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;height:80px}
+.wc-col{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
 .wc-bar-wrap{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center}
-.wc-bar{width:100%;max-width:24px;border-radius:4px 4px 0 0;background:#FFE0D0;transition:height .5s cubic-bezier(.4,0,.2,1);min-height:2px}
-.wc-bar.is-today-bar{background:#FF6B35}
-.wc-day{font-size:10px;color:#BBB;font-weight:500}
-/* Achievement badges */
-.achieve-section{padding:0 16px 100px}
-.achieve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.badge-card{background:white;border-radius:16px;padding:14px 10px;text-align:center;transition:transform .15s}
-.badge-card.locked{opacity:.45}
-.badge-icon{font-size:28px;margin-bottom:6px}
-.badge-name{font-size:11px;font-weight:600;color:#1A1A1A;line-height:1.3}
-.badge-desc{font-size:10px;color:#BBB;margin-top:3px;line-height:1.3}
-.badge-card.unlocked .badge-icon{filter:drop-shadow(0 2px 6px rgba(255,107,53,.35))}
+.wc-bar{width:100%;max-width:32px;border-radius:8px;background:#F0EDE8;transition:height .5s cubic-bezier(.4,0,.2,1);min-height:4px}
+.wc-bar.today{background:#FF6B35}
+.wc-day{font-size:11px;color:#BBB;font-weight:500}
 
 /* ── Toast ── */
 .toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%) translateY(10px);background:#1A1A1A;color:white;font-size:13px;font-weight:500;padding:10px 18px;border-radius:20px;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;white-space:nowrap;max-width:calc(100vw - 40px);text-align:center}
@@ -267,31 +274,48 @@ input{font-family:inherit}
     <div class="section-hd" style="padding:16px 0 12px">
       <span class="section-title">오늘의 기록</span>
     </div>
-    <div class="log-grid">
-      <div class="log-card">
-        <div class="log-card-lbl">⏱ 총 집중 시간</div>
-        <div class="log-card-val" id="log-time">0<span>분</span></div>
-        <div class="log-card-sub" id="log-time-sub">완료한 습관 기준</div>
-      </div>
-      <div class="log-card">
-        <div class="log-card-lbl">🎯 달성률</div>
-        <div class="log-card-val" id="log-rate">0<span>%</span></div>
-        <div class="log-card-bar-wrap"><div class="log-card-bar" id="log-rate-bar" style="width:0%"></div></div>
+    <div class="log-card">
+      <div class="log-sub-title">오늘 날씨</div>
+      <div class="weather-row" id="weather-row">
+        <div class="weather-opt sel" data-w="0"><div class="w-icon">☀️</div><div class="w-lbl">맑음</div></div>
+        <div class="weather-opt" data-w="1"><div class="w-icon">⛅</div><div class="w-lbl">구름조금</div></div>
+        <div class="weather-opt" data-w="2"><div class="w-icon">☁️</div><div class="w-lbl">흐림</div></div>
+        <div class="weather-opt" data-w="3"><div class="w-icon">🌧️</div><div class="w-lbl">비</div></div>
+        <div class="weather-opt" data-w="4"><div class="w-icon">❄️</div><div class="w-lbl">눈</div></div>
       </div>
     </div>
-    <div class="log-card-wide">
-      <div class="log-card-lbl">📅 최근 7일 달성 현황</div>
-      <div class="week-chart" id="week-chart"></div>
+    <div class="log-card">
+      <div class="log-sub-title">오늘 기분</div>
+      <div class="mood-row" id="mood-row">
+        <div class="mood-opt" data-m="0"><div class="mood-face" style="background:#E8F8E8">😄</div><div class="mood-lbl">최고</div></div>
+        <div class="mood-opt sel" data-m="1"><div class="mood-face" style="background:#E8F8E8">😊</div><div class="mood-lbl">좋음</div></div>
+        <div class="mood-opt" data-m="2"><div class="mood-face" style="background:#FFF8E8">😐</div><div class="mood-lbl">보통</div></div>
+        <div class="mood-opt" data-m="3"><div class="mood-face" style="background:#FFF0E8">😕</div><div class="mood-lbl">별로</div></div>
+        <div class="mood-opt" data-m="4"><div class="mood-face" style="background:#FFE8E8">😞</div><div class="mood-lbl">나쁨</div></div>
+      </div>
+    </div>
+    <div class="log-card">
+      <div class="log-sub-title">한 줄 기록</div>
+      <div class="diary-wrap">
+        <textarea id="diary-input" class="diary-input" maxlength="140" placeholder="오늘 하루를 한 줄로 남겨보세요"></textarea>
+        <div class="diary-count"><span id="diary-cnt">0</span>/140</div>
+      </div>
     </div>
   </div>
 
-  <!-- ── 달성 뱃지 ── -->
-  <div class="achieve-section">
+  <!-- ── 이번 주 달성률 ── -->
+  <div class="week-section">
     <div class="section-hd">
-      <span class="section-title">달성 뱃지</span>
-      <span class="section-badge" id="badge-count">0개 획득</span>
+      <span class="section-title">이번 주 달성률</span>
     </div>
-    <div class="achieve-grid" id="achieve-grid"></div>
+    <div class="week-card">
+      <div class="week-rate-sub">이번 주 평균 달성률</div>
+      <div class="week-rate-row">
+        <div class="week-rate-val" id="week-rate-val">0<span>%</span></div>
+        <div class="week-vs-badge" id="week-vs-badge">지난주 +0%</div>
+      </div>
+      <div class="week-chart" id="week-chart"></div>
+    </div>
   </div>
 
   <button class="fab" id="btn-add">
@@ -485,105 +509,108 @@ function getWeeklyRate() {
 }
 
 // ── RENDER ──
-// ── TODAY'S LOG ──
-function parseMins(timeStr) {
-  if (!timeStr) return 0;
-  var m = timeStr.match(/(\d+)\s*분/);
-  if (m) return parseInt(m[1]);
-  m = timeStr.match(/(\d+)\s*시간/);
-  if (m) return parseInt(m[1]) * 60;
-  return 0;
+// ── 오늘의 기록 JS ──
+function getTodayLogKey() { return 'hf_log_' + todayKey(); }
+
+function loadTodayLog() {
+  try {
+    var raw = localStorage.getItem(getTodayLogKey());
+    return raw ? JSON.parse(raw) : { weather: 0, mood: 1, diary: '' };
+  } catch(e) { return { weather: 0, mood: 1, diary: '' }; }
 }
 
-function updateTodayLog() {
-  var today = todayKey();
-  var done = state.completions[today] || [];
-  var total = state.habits.length;
-  var doneCount = done.length;
-  var pct = total ? Math.round(doneCount / total * 100) : 0;
+function saveTodayLog(log) {
+  try { localStorage.setItem(getTodayLogKey(), JSON.stringify(log)); } catch(e) {}
+}
 
-  // 집중 시간: 완료된 습관의 time 파싱 합산
-  var mins = 0;
-  done.forEach(function(id) {
-    var h = state.habits.find(function(x){ return x.id === id; });
-    if (h) mins += parseMins(h.time);
+function initTodayLog() {
+  var log = loadTodayLog();
+
+  // 날씨 선택
+  document.getElementById('weather-row').querySelectorAll('.weather-opt').forEach(function(el) {
+    el.classList.toggle('sel', parseInt(el.dataset.w) === log.weather);
+    el.addEventListener('click', function() {
+      var idx = parseInt(el.dataset.w);
+      document.getElementById('weather-row').querySelectorAll('.weather-opt').forEach(function(o){o.classList.remove('sel');});
+      el.classList.add('sel');
+      var l = loadTodayLog(); l.weather = idx; saveTodayLog(l);
+    });
   });
 
-  document.getElementById('log-time').innerHTML = mins + '<span>분</span>';
-  document.getElementById('log-time-sub').textContent = doneCount + '개 습관 완료 기준';
-  document.getElementById('log-rate').innerHTML = pct + '<span>%</span>';
-  document.getElementById('log-rate-bar').style.width = pct + '%';
+  // 기분 선택
+  document.getElementById('mood-row').querySelectorAll('.mood-opt').forEach(function(el) {
+    el.classList.toggle('sel', parseInt(el.dataset.m) === log.mood);
+    el.addEventListener('click', function() {
+      var idx = parseInt(el.dataset.m);
+      document.getElementById('mood-row').querySelectorAll('.mood-opt').forEach(function(o){o.classList.remove('sel');});
+      el.classList.add('sel');
+      var l = loadTodayLog(); l.mood = idx; saveTodayLog(l);
+    });
+  });
 
-  // 7일 차트
+  // 한 줄 기록
+  var ta = document.getElementById('diary-input');
+  var cnt = document.getElementById('diary-cnt');
+  ta.value = log.diary || '';
+  cnt.textContent = ta.value.length;
+  ta.addEventListener('input', function() {
+    cnt.textContent = ta.value.length;
+    var l = loadTodayLog(); l.diary = ta.value; saveTodayLog(l);
+  });
+}
+
+// ── 이번 주 달성률 차트 ──
+function getWeekRate(offsetWeeks) {
+  // offsetWeeks=0 이번주, 1=지난주
+  if (!state.habits.length) return 0;
+  var today = new Date();
+  var completed = 0, total = 0;
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(today);
+    d.setDate(d.getDate() - i - offsetWeeks * 7);
+    total += state.habits.length;
+    completed += (state.completions[fmtDate(d)] || []).length;
+  }
+  return total ? Math.round(completed / total * 100) : 0;
+}
+
+function renderWeekChart() {
+  var thisWeek = getWeekRate(0);
+  var lastWeek = getWeekRate(1);
+  var diff = thisWeek - lastWeek;
+
+  document.getElementById('week-rate-val').innerHTML = thisWeek + '<span>%</span>';
+  var badge = document.getElementById('week-vs-badge');
+  badge.textContent = '지난주 ' + (diff >= 0 ? '+' : '') + diff + '%';
+  badge.style.background = diff >= 0 ? '#FFF0EB' : '#F0F0F0';
+  badge.style.color = diff >= 0 ? '#FF6B35' : '#888';
+
+  // 월~토 차트 (이번 주 월요일 기준)
   var chart = document.getElementById('week-chart');
   chart.innerHTML = '';
-  var DAYS = ['일','월','화','수','목','금','토'];
-  var todayDate = new Date();
-  var maxVal = 1;
-  var cols = [];
-  for (var i = 6; i >= 0; i--) {
-    var d = new Date(todayDate); d.setDate(d.getDate() - i);
+  var today = new Date();
+  var dow = today.getDay(); // 0=일
+  var mondayOffset = dow === 0 ? -6 : 1 - dow;
+  var DAYS = ['월','화','수','목','금','토'];
+  for (var i = 0; i < 6; i++) {
+    var d = new Date(today);
+    d.setDate(today.getDate() + mondayOffset + i);
     var k = fmtDate(d);
     var cnt = (state.completions[k] || []).length;
     var t = state.habits.length || 1;
-    cols.push({ day: DAYS[d.getDay()], pct: Math.round(cnt / t * 100), isToday: i === 0 });
-    if (cnt > maxVal) maxVal = cnt;
-  }
-  cols.forEach(function(c) {
+    var pct = Math.round(cnt / t * 100);
+    var barH = Math.max(4, Math.round(pct * 0.7)); // max ~70px
+    var isToday = k === todayKey();
     var col = document.createElement('div');
     col.className = 'wc-col';
-    var barH = Math.max(2, Math.round(c.pct * 0.5)); // max 50px
     col.innerHTML =
-      '<div class="wc-bar-wrap"><div class="wc-bar' + (c.isToday ? ' is-today-bar' : '') +
+      '<div class="wc-bar-wrap"><div class="wc-bar' + (isToday ? ' today' : '') +
       '" style="height:' + barH + 'px"></div></div>' +
-      '<div class="wc-day">' + c.day + '</div>';
+      '<div class="wc-day">' + DAYS[i] + '</div>';
     chart.appendChild(col);
-  });
+  }
 }
 
-// ── ACHIEVEMENTS ──
-var BADGES = [
-  { id:'first',   icon:'🌱', name:'첫 발걸음',   desc:'첫 습관 완료',        check: function(){ return getTotalCompletions() >= 1; } },
-  { id:'week1',   icon:'🔥', name:'7일 연속',     desc:'7일 연속 달성',       check: function(){ return getOverallStreak() >= 7; } },
-  { id:'month1',  icon:'💎', name:'30일 연속',    desc:'30일 연속 달성',      check: function(){ return getOverallStreak() >= 30; } },
-  { id:'habit5',  icon:'🎯', name:'습관 5개',     desc:'습관 5개 이상 등록',  check: function(){ return state.habits.length >= 5; } },
-  { id:'perfect', icon:'⭐', name:'완벽한 하루',  desc:'하루 전체 달성',      check: function(){ return hasPerfectDay(); } },
-  { id:'c50',     icon:'🏆', name:'50회 달성',    desc:'총 50회 완료',        check: function(){ return getTotalCompletions() >= 50; } },
-  { id:'c100',    icon:'🥇', name:'100회 달성',   desc:'총 100회 완료',       check: function(){ return getTotalCompletions() >= 100; } },
-  { id:'week4',   icon:'🌟', name:'4주 달성',     desc:'28일 연속 달성',      check: function(){ return getOverallStreak() >= 28; } },
-  { id:'earlybird',icon:'🌅',name:'얼리버드',     desc:'7일 이상 스트릭',     check: function(){ return getOverallStreak() >= 7; } },
-];
-
-function getTotalCompletions() {
-  var total = 0;
-  Object.values(state.completions).forEach(function(arr){ total += arr.length; });
-  return total;
-}
-
-function hasPerfectDay() {
-  if (!state.habits.length) return false;
-  return Object.values(state.completions).some(function(arr){
-    return arr.length >= state.habits.length;
-  });
-}
-
-function renderAchievements() {
-  var grid = document.getElementById('achieve-grid');
-  grid.innerHTML = '';
-  var unlocked = 0;
-  BADGES.forEach(function(b) {
-    var ok = b.check();
-    if (ok) unlocked++;
-    var card = document.createElement('div');
-    card.className = 'badge-card ' + (ok ? 'unlocked' : 'locked');
-    card.innerHTML =
-      '<div class="badge-icon">' + b.icon + '</div>' +
-      '<div class="badge-name">' + b.name + '</div>' +
-      '<div class="badge-desc">' + b.desc + '</div>';
-    grid.appendChild(card);
-  });
-  document.getElementById('badge-count').textContent = unlocked + '개 획득';
-}
 
 function renderAll() {
   renderGreeting();
@@ -591,8 +618,7 @@ function renderAll() {
   renderHabits();
   updateProgress();
   updateStats();
-  updateTodayLog();
-  renderAchievements();
+  renderWeekChart();
 }
 
 function renderGreeting() {
@@ -966,6 +992,8 @@ function init() {
   if (restored) { showApp(); if(accessToken) syncWithDrive(); }
   else if (state.habits.length>0) showApp();
   else showLogin();
+
+  initTodayLog();
 
   // Login
   document.getElementById('btn-google-login').addEventListener('click', doGoogleLogin);
