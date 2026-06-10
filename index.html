@@ -34,7 +34,7 @@ input{font-family:inherit}
 .local-btn{margin-top:14px;font-size:13px;color:#AAA;text-decoration:underline;text-underline-offset:3px}
 
 /* ── App Header ── */
-.app-header{background:white;padding:48px 20px 0;position:sticky;top:0;z-index:50;border-bottom:1px solid #F0EDE8}
+.app-header{background:white;padding:48px 20px 14px;position:sticky;top:0;z-index:50;border-bottom:none}
 .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .logo{display:flex;align-items:center;gap:8px}
 .logo-sm-icon{width:30px;height:30px;background:#FF6B35;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
@@ -46,10 +46,13 @@ input{font-family:inherit}
 .icon-btn svg{transition:transform .3s}
 .icon-btn.syncing svg{animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.greeting{margin-bottom:14px}
+.greeting{margin-bottom:0}
 .greeting h2{font-size:20px;font-weight:700;letter-spacing:-.3px}
 .greeting p{font-size:12px;color:#AAA;margin-top:2px}
-.week-strip{display:flex;justify-content:space-between;padding-bottom:14px}
+
+/* ── Week Strip (분리된 섹션) ── */
+.week-strip-wrap{background:white;padding:12px 20px 14px;border-bottom:1px solid #F0EDE8;position:sticky;top:calc(var(--header-h,110px));z-index:49}
+.week-strip{display:flex;justify-content:space-between}
 .day-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
 .day-lbl{font-size:11px;color:#BBB;font-weight:500}
 .day-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#777;transition:all .2s}
@@ -230,8 +233,10 @@ input{font-family:inherit}
       <h2 id="greeting-text">좋은 아침이에요 👋</h2>
       <p id="today-label"></p>
     </div>
-    <div class="week-strip" id="week-strip"></div>
   </header>
+  <div class="week-strip-wrap" id="week-strip-wrap">
+    <div class="week-strip" id="week-strip"></div>
+  </div>
 
   <div class="prog-banner">
     <div class="prog-left">
@@ -498,12 +503,14 @@ function getBestStreak() {
 
 function getWeeklyRate() {
   if (!state.habits.length) return 0;
-  var today = new Date(), completed = 0, total = 0;
+  var today = new Date();
+  var dow = today.getDay();
+  var completed = 0, total = 0;
   for (var i = 0; i < 7; i++) {
-    var d = new Date(today); d.setDate(d.getDate()-i);
-    var k = fmtDate(d);
+    var d = new Date(today);
+    d.setDate(today.getDate() - dow + i);
     total += state.habits.length;
-    completed += (state.completions[k]||[]).length;
+    completed += (state.completions[fmtDate(d)]||[]).length;
   }
   return total ? Math.round(completed/total*100) : 0;
 }
@@ -561,13 +568,15 @@ function initTodayLog() {
 
 // ── 이번 주 달성률 차트 ──
 function getWeekRate(offsetWeeks) {
-  // offsetWeeks=0 이번주, 1=지난주
+  // offsetWeeks=0 이번주(일~토), 1=지난주
   if (!state.habits.length) return 0;
   var today = new Date();
+  var dow = today.getDay();
   var completed = 0, total = 0;
   for (var i = 0; i < 7; i++) {
     var d = new Date(today);
-    d.setDate(d.getDate() - i - offsetWeeks * 7);
+    // 이번 주 일요일 기준 i번째 날
+    d.setDate(today.getDate() - dow + i - offsetWeeks * 7);
     total += state.habits.length;
     completed += (state.completions[fmtDate(d)] || []).length;
   }
@@ -585,21 +594,20 @@ function renderWeekChart() {
   badge.style.background = diff >= 0 ? '#FFF0EB' : '#F0F0F0';
   badge.style.color = diff >= 0 ? '#FF6B35' : '#888';
 
-  // 월~토 차트 (이번 주 월요일 기준)
+  // 일~토 차트 (이번 주 일요일 기준)
   var chart = document.getElementById('week-chart');
   chart.innerHTML = '';
   var today = new Date();
-  var dow = today.getDay(); // 0=일
-  var mondayOffset = dow === 0 ? -6 : 1 - dow;
-  var DAYS = ['월','화','수','목','금','토'];
-  for (var i = 0; i < 6; i++) {
+  var dow = today.getDay();
+  var DAYS = ['일','월','화','수','목','금','토'];
+  for (var i = 0; i < 7; i++) {
     var d = new Date(today);
-    d.setDate(today.getDate() + mondayOffset + i);
+    d.setDate(today.getDate() - dow + i);
     var k = fmtDate(d);
     var cnt = (state.completions[k] || []).length;
     var t = state.habits.length || 1;
     var pct = Math.round(cnt / t * 100);
-    var barH = Math.max(4, Math.round(pct * 0.7)); // max ~70px
+    var barH = Math.max(4, Math.round(pct * 0.7));
     var isToday = k === todayKey();
     var col = document.createElement('div');
     col.className = 'wc-col';
@@ -635,17 +643,23 @@ function renderWeekStrip() {
   var strip = document.getElementById('week-strip');
   var DAYS=['일','월','화','수','목','금','토'];
   var today = new Date();
-  var dow = today.getDay();
-  var mondayOffset = dow===0?-6:1-dow;
+  var dow = today.getDay(); // 0=일
+  // 일요일 시작: 이번 주 일요일 기준
+  var sundayOffset = -dow; // 이번 주 일요일까지의 오프셋
   strip.innerHTML = '';
   for (var i=0; i<7; i++) {
-    var d = new Date(today); d.setDate(today.getDate()+mondayOffset+i);
+    var d = new Date(today); d.setDate(today.getDate()+sundayOffset+i);
     var isToday = fmtDate(d)===todayKey();
     var isPast = !isToday && d<today;
     var el = document.createElement('div');
     el.className = 'day-item'+(isToday?' is-today':isPast?' is-past':'');
     el.innerHTML = '<div class="day-lbl">'+DAYS[d.getDay()]+'</div><div class="day-num">'+d.getDate()+'</div>';
     strip.appendChild(el);
+  }
+  // week-strip-wrap top을 헤더 높이에 맞게 동적 설정
+  var header = document.getElementById('app-header');
+  if (header) {
+    document.getElementById('week-strip-wrap').style.top = header.offsetHeight + 'px';
   }
 }
 
@@ -994,6 +1008,15 @@ function init() {
   else showLogin();
 
   initTodayLog();
+
+  // week-strip-wrap top 동적 설정
+  function syncStripTop() {
+    var header = document.getElementById('app-header');
+    var wrap = document.getElementById('week-strip-wrap');
+    if (header && wrap) wrap.style.top = header.offsetHeight + 'px';
+  }
+  window.addEventListener('resize', syncStripTop);
+  syncStripTop();
 
   // Login
   document.getElementById('btn-google-login').addEventListener('click', doGoogleLogin);
